@@ -12,7 +12,6 @@ import java.util.UUID;
 public class PessoaEntity {
 
     @Id
-    @Type(type = "uuid-char")
     private Integer id;
 
     private String nomeCompleto;
