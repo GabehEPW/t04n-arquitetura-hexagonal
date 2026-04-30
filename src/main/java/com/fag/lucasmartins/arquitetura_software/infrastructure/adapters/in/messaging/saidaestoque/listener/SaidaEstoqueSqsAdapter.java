@@ -4,12 +4,14 @@ import com.fag.lucasmartins.arquitetura_software.application.ports.in.service.Es
 import com.fag.lucasmartins.arquitetura_software.core.domain.commands.DiminuirEstoqueCommand;
 import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.saidaestoque.dto.SaidaEstoqueEventDTO;
 import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.saidaestoque.mapper.SaidaEstoqueDTOMapper;
-import io.awspring.cloud.sqs.annotation.SqsListener;
+import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("aws")
 public class SaidaEstoqueSqsAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(SaidaEstoqueSqsAdapter.class);

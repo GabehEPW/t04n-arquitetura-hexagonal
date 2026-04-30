@@ -1,47 +1,58 @@
 package com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.dto;
 
+import java.util.List;
+import java.util.UUID;
+
 public class PedidoDTO {
 
-    private Integer zipcode;
+    private UUID id;
 
-    private Integer customerId;
+    private PessoaDTO pessoa;
 
-    private Integer OrdemItems;
+    private String cep;
 
-    private Integer Sku;
+    private List<PedidoProdutoDTO> itens;
 
-    private Integer Amount;
+    private Double valorTotal;
 
-    private Integer Origin;
-
-    private Integer OcurredAt;
-
-    public Integer getzipcode() {
-        return zipcode;
+    public UUID getId() {
+        return id;
     }
 
-    public Integer getcustomerId() {
-        return customerId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public Integer getOrdemItems() {
-        return OrdemItems;
+    public PessoaDTO getPessoa() {
+        return pessoa;
     }
 
-    public Integer getSku() {
-        return Sku;
+    public void setPessoa(PessoaDTO pessoa) {
+        this.pessoa = pessoa;
     }
 
-    public Integer getAmount() {
-        return Amount;
+    public String getCep() {
+        return cep;
     }
 
-    public Integer getOrigin() {
-        return Origin;
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 
-    public Integer getOcurredAt() {
-        return OcurredAt;
+    public List<PedidoProdutoDTO> getItens() {
+        return itens;
+    }
+
+    public void setItens(List<PedidoProdutoDTO> itens) {
+        this.itens = itens;
+    }
+
+    public Double getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(Double valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
 }

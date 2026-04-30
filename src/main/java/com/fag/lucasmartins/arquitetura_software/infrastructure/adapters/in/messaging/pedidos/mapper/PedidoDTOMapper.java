@@ -1,24 +1,142 @@
 package com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.mapper;
 
-import org.apache.catalina.mapper.Mapper;
+import com.fag.lucasmartins.arquitetura_software.core.domain.bo.PedidoBO;
+import com.fag.lucasmartins.arquitetura_software.core.domain.bo.PedidoProdutoBO;
+import com.fag.lucasmartins.arquitetura_software.core.domain.bo.PessoaBO;
+import com.fag.lucasmartins.arquitetura_software.core.domain.bo.ProdutoBO;
+import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.dto.PedidoDTO;
+import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.dto.PedidoProdutoDTO;
+import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.dto.PessoaDTO;
+import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.dto.ProdutoDTO;
 
-import com.fag.lucasmartins.arquitetura_software.core.domain.commands.AdicionarEstoqueCommand;
-import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.entradaestoque.dto.EntradaEstoqueDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PedidoDTOMapper {
 
-    public static PedidoCommand toCommand(pedidoDTO pedidoDTO) {
-        return new PedidoCommand(
-                pedidoDTO.getAmount(),
-                pedidoDTO.getcustomerId(),
-                pedidoDTO.getOcurredAt(),
-                pedidoDTO.getOrigin(),
-                pedidoDTO.getOrdemItems(),
-                pedidoDTO.getProdutoId(),
-                pedidoDTO.get(),
-                pedidoDTO.get(),
-                pedidoDTO.get(),
-                pedidoDTO.get(),
-        );
+    private PedidoDTOMapper() {
+    }
+
+    public static PedidoBO toBo(PedidoDTO dto) {
+        final PedidoBO bo = new PedidoBO();
+
+        bo.setId(dto.getId());
+        bo.setPessoa(toBo(dto.getPessoa()));
+        bo.setCep(dto.getCep());
+        bo.setItens(toBoItens(dto.getItens()));
+
+        return bo;
+    }
+
+    public static PedidoDTO toDto(PedidoBO bo) {
+        final PedidoDTO dto = new PedidoDTO();
+
+        dto.setId(bo.getId());
+        dto.setPessoa(toDto(bo.getPessoa()));
+        dto.setCep(bo.getCep());
+        dto.setItens(toDtoItens(bo.getItens()));
+        dto.setValorTotal(bo.getValorTotal());
+
+        return dto;
+    }
+
+    private static PessoaBO toBo(PessoaDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        final PessoaBO bo = new PessoaBO();
+        bo.setId(dto.getId());
+        bo.setNomeCompleto(dto.getNomeCompleto());
+        bo.setCpf(dto.getCpf());
+        bo.setDataNascimento(dto.getDataNascimento());
+        bo.setEmail(dto.getEmail());
+        bo.setTelefone(dto.getTelefone());
+        return bo;
+    }
+
+    private static PessoaDTO toDto(PessoaBO bo) {
+        if (bo == null) {
+            return null;
+        }
+
+        final PessoaDTO dto = new PessoaDTO();
+        dto.setId(bo.getId());
+        dto.setNomeCompleto(bo.getNomeCompleto());
+        dto.setCpf(bo.getCpf());
+        dto.setDataNascimento(bo.getDataNascimento());
+        dto.setEmail(bo.getEmail());
+        dto.setTelefone(bo.getTelefone());
+        return dto;
+    }
+
+    private static List<PedidoProdutoBO> toBoItens(List<PedidoProdutoDTO> itens) {
+        final List<PedidoProdutoBO> boItens = new ArrayList<>();
+        if (itens == null) {
+            return boItens;
+        }
+
+        for (PedidoProdutoDTO item : itens) {
+            boItens.add(toBo(item));
+        }
+
+        return boItens;
+    }
+
+    private static PedidoProdutoBO toBo(PedidoProdutoDTO dto) {
+        final PedidoProdutoBO bo = new PedidoProdutoBO();
+        bo.setId(dto.getId());
+        bo.setQuantidade(dto.getQuantidade());
+        bo.setSubtotal(dto.getSubtotal() == null ? 0.0 : dto.getSubtotal());
+        bo.setProduto(toBo(dto.getProduto()));
+        return bo;
+    }
+
+    private static ProdutoBO toBo(ProdutoDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        final ProdutoBO bo = new ProdutoBO();
+        bo.setId(dto.getId());
+        bo.setNome(dto.getNome());
+        bo.setEstoque(dto.getEstoque());
+        bo.setPreco(dto.getPreco());
+        return bo;
+    }
+
+    private static List<PedidoProdutoDTO> toDtoItens(List<PedidoProdutoBO> itens) {
+        final List<PedidoProdutoDTO> dtoItens = new ArrayList<>();
+        if (itens == null) {
+            return dtoItens;
+        }
+
+        for (PedidoProdutoBO item : itens) {
+            dtoItens.add(toDto(item));
+        }
+
+        return dtoItens;
+    }
+
+    private static PedidoProdutoDTO toDto(PedidoProdutoBO bo) {
+        final PedidoProdutoDTO dto = new PedidoProdutoDTO();
+        dto.setId(bo.getId());
+        dto.setQuantidade(bo.getQuantidade());
+        dto.setSubtotal(bo.getSubtotal());
+        dto.setProduto(toDto(bo.getProduto()));
+        return dto;
+    }
+
+    private static ProdutoDTO toDto(ProdutoBO bo) {
+        if (bo == null) {
+            return null;
+        }
+
+        final ProdutoDTO dto = new ProdutoDTO();
+        dto.setId(bo.getId());
+        dto.setNome(bo.getNome());
+        dto.setEstoque(bo.getEstoque());
+        dto.setPreco(bo.getPreco());
+        return dto;
     }
 }
