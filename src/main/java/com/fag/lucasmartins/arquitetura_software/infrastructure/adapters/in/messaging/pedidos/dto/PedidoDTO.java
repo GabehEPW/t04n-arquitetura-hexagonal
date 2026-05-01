@@ -15,6 +15,16 @@ public class PedidoDTO {
 
     private Double valorTotal;
 
+    private String zipCode;
+
+    private Long customerId;
+
+    private List<PedidoProdutoDTO> orderItems;
+
+    private String origin;
+
+    private String occurredAt;
+
     public UUID getId() {
         return id;
     }
@@ -53,6 +63,46 @@ public class PedidoDTO {
 
     public void setValorTotal(Double valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public Long getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
+
+    public List<PedidoProdutoDTO> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<PedidoProdutoDTO> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getOccurredAt() {
+        return occurredAt;
+    }
+
+    public void setOccurredAt(String occurredAt) {
+        this.occurredAt = occurredAt;
     }
 
 }

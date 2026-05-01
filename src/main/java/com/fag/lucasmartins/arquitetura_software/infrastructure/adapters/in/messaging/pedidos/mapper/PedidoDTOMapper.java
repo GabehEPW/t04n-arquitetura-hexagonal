@@ -21,9 +21,9 @@ public class PedidoDTOMapper {
         final PedidoBO bo = new PedidoBO();
 
         bo.setId(dto.getId());
-        bo.setPessoa(toBo(dto.getPessoa()));
-        bo.setCep(dto.getCep());
-        bo.setItens(toBoItens(dto.getItens()));
+        bo.setPessoa(toBoPessoa(dto));
+        bo.setCep(resolveCep(dto));
+        bo.setItens(toBoItens(dto));
 
         return bo;
     }
@@ -35,9 +35,38 @@ public class PedidoDTOMapper {
         dto.setPessoa(toDto(bo.getPessoa()));
         dto.setCep(bo.getCep());
         dto.setItens(toDtoItens(bo.getItens()));
+        dto.setZipCode(bo.getCep());
+        dto.setOrderItems(toDtoItens(bo.getItens()));
+        dto.setCustomerId(bo.getPessoa() != null ? Long.valueOf(bo.getPessoa().getId()) : null);
         dto.setValorTotal(bo.getValorTotal());
 
         return dto;
+    }
+
+    private static PessoaBO toBoPessoa(PedidoDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        if (dto.getPessoa() != null) {
+            return toBo(dto.getPessoa());
+        }
+
+        if (dto.getCustomerId() == null) {
+            return null;
+        }
+
+        final PessoaBO bo = new PessoaBO();
+        bo.setId(dto.getCustomerId().intValue());
+        return bo;
+    }
+
+    private static String resolveCep(PedidoDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        return dto.getZipCode() != null ? dto.getZipCode() : dto.getCep();
     }
 
     private static PessoaBO toBo(PessoaDTO dto) {
@@ -70,8 +99,10 @@ public class PedidoDTOMapper {
         return dto;
     }
 
-    private static List<PedidoProdutoBO> toBoItens(List<PedidoProdutoDTO> itens) {
+    private static List<PedidoProdutoBO> toBoItens(PedidoDTO dto) {
         final List<PedidoProdutoBO> boItens = new ArrayList<>();
+        final List<PedidoProdutoDTO> itens = dto != null && dto.getOrderItems() != null ? dto.getOrderItems() : dto != null ? dto.getItens() : null;
+
         if (itens == null) {
             return boItens;
         }
@@ -86,9 +117,27 @@ public class PedidoDTOMapper {
     private static PedidoProdutoBO toBo(PedidoProdutoDTO dto) {
         final PedidoProdutoBO bo = new PedidoProdutoBO();
         bo.setId(dto.getId());
-        bo.setQuantidade(dto.getQuantidade());
+        bo.setQuantidade(dto.getAmount() != null ? dto.getAmount() : dto.getQuantidade());
         bo.setSubtotal(dto.getSubtotal() == null ? 0.0 : dto.getSubtotal());
-        bo.setProduto(toBo(dto.getProduto()));
+        bo.setProduto(toBoProduto(dto));
+        return bo;
+    }
+
+    private static ProdutoBO toBoProduto(PedidoProdutoDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        if (dto.getProduto() != null) {
+            return toBo(dto.getProduto());
+        }
+
+        if (dto.getSku() == null) {
+            return null;
+        }
+
+        final ProdutoBO bo = new ProdutoBO();
+        bo.setId(dto.getSku());
         return bo;
     }
 
@@ -122,8 +171,10 @@ public class PedidoDTOMapper {
         final PedidoProdutoDTO dto = new PedidoProdutoDTO();
         dto.setId(bo.getId());
         dto.setQuantidade(bo.getQuantidade());
+        dto.setAmount(bo.getQuantidade());
         dto.setSubtotal(bo.getSubtotal());
         dto.setProduto(toDto(bo.getProduto()));
+        dto.setSku(bo.getProduto() != null ? bo.getProduto().getId() : null);
         return dto;
     }
 

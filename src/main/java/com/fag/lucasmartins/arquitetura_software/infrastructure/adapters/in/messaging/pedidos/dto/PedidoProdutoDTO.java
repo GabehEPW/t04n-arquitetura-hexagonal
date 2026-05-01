@@ -4,6 +4,11 @@ public class PedidoProdutoDTO {
 
     private Integer id;
 
+    // Campos do contrato de evento
+    private Integer sku;
+
+    private Integer amount;
+
     private ProdutoDTO produto;
 
     private int quantidade;
@@ -16,6 +21,22 @@ public class PedidoProdutoDTO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getSku() {
+        return sku;
+    }
+
+    public void setSku(Integer sku) {
+        this.sku = sku;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
     public ProdutoDTO getProduto() {
