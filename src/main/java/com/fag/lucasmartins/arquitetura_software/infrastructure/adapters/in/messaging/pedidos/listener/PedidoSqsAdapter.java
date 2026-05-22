@@ -1,15 +1,16 @@
 package com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.listener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+
 import com.fag.lucasmartins.arquitetura_software.application.ports.in.service.PedidoServicePort;
 import com.fag.lucasmartins.arquitetura_software.core.domain.bo.PedidoBO;
 import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.dto.PedidoDTO;
 import com.fag.lucasmartins.arquitetura_software.infrastructure.adapters.in.messaging.pedidos.mapper.PedidoDTOMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.cloud.aws.messaging.listener.annotation.SqsListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 
 @Component
 @Profile("aws")
@@ -27,7 +28,7 @@ public class PedidoSqsAdapter {
     }
 
     @SqsListener("${queue.order-events}")
-    public void receberMensagem(String payload) {
+    public void receberMensagem(String payload) throws Exception {
         try {
             final PedidoDTO dto = objectMapper.readValue(payload, PedidoDTO.class);
 
@@ -37,9 +38,6 @@ public class PedidoSqsAdapter {
             pedidoServicePort.criarPedido(pedidoBO);
 
             log.info("Pedido processado com sucesso.");
-        } catch (com.fasterxml.jackson.core.JsonProcessingException jpe) {
-            log.error("Erro ao desserializar payload JSON. Payload: {}", payload, jpe);
-            // Não rethrow para evitar loop de falha de listener por mensagem malformada
         } catch (Exception e) {
             log.error("Erro ao processar o evento de pedido", e);
             throw e;
